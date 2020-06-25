@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button startBtn;
     private TextView textTextView;
-    private boolean isServiceOn = false;
+    //private boolean isServiceOn;
     //private Handler handler = new Handler();
     private int i=0;
     private String TAG = MainActivity.class.getSimpleName();
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
         startBtn = findViewById(R.id.startBtn);
         textTextView = findViewById(R.id.textTextView);
+
+        if(getServiceStatus()) startBtn.setText("End Service");
+        else startBtn.setText("Start Service");
 
         addListeners();
     }
@@ -70,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isServiceOn){
+                if(!getServiceStatus()){
                     startBtn.setText("End Service");
-                    isServiceOn = true;
+                    setServiceStatus(true);
                     Log.d(TAG, "handler.postDelayed: RUN");
+                    Log.d(TAG, "Service: " + getServiceStatus());
                     //handler.postDelayed(runnable, 1000);
 
                     //MainActivity.this.startService(new Intent(MainActivity.this,  MyService.class));
@@ -89,13 +94,26 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     startBtn.setText("Start Service");
-                    isServiceOn = false;
+                    setServiceStatus(false);
                     Log.d(TAG, "handler.postDelayed: REMOVE");
+                    Log.d(TAG, "Service: " + getServiceStatus());
                     //handler.removeCallbacks(runnable);
                     stopService(new Intent(MainActivity.this,  MyService.class));
                 }
             }
         });
+    }
+
+    public boolean getServiceStatus(){
+        SharedPreferences sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("isServiceOn", false);
+    }
+
+    public void setServiceStatus(boolean status){
+        SharedPreferences sharedPreferences =  this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isServiceOn", status);
+        editor.commit();
     }
 
 //    final Runnable runnable = new Runnable() {

@@ -22,7 +22,7 @@ public class MyService extends Service {
     private String TAG = MyService.class.getSimpleName();
     private Handler handler = new Handler();
     private int i=0;
-    private static  final int ONGOING_NOTIFICATION_ID = 123;
+    private static  final int ONGOING_NOTIFICATION_ID = 2137;
     private String channelId;
     //PowerManager.WakeLock wakeLock;
 
@@ -98,11 +98,11 @@ public class MyService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private String createNotificationChannel(NotificationManager notificationManager){
         String channelId = "my_service_channel_id";
-//        String channelName = "My Foreground Service";
-//        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
-//        channel.setImportance(NotificationManager.IMPORTANCE_NONE);
-//        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-//        notificationManager.createNotificationChannel(channel);
+        String channelName = "My Foreground Service";
+        NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+        channel.setImportance(NotificationManager.IMPORTANCE_NONE);
+        channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        notificationManager.createNotificationChannel(channel);
         return channelId;
     }
 
